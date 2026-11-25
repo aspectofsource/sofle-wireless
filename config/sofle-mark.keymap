@@ -268,7 +268,7 @@
 //  <            W         X         C         V         B     [left knob]    [right knob]     N          .          ,          :           ;          ^
 &kp NON_US_BSLH  &kp Z     &kp X     &kp C     &kp V     &kp B &ht C_MUTE C_PP &ht HOME END    &kp N      &kp M      &kp COMMA  &kp DOT     &kp FSLH   &kp EQUAL
 //                     Undo/Redo          123/LIVE           Shift      Ctrl       Bksp      Space      AltGr      Shift      NAV/BT           PrtSc
-                       &ht LC(Y) LC(W)    &lt_tog NUM LIVE   &kp LSHFT  &kp LCTRL  &bksp     &kp SPACE  &kp RALT   &kp RSHFT  &lt_tog NAV BT   &ht LA(PSCRN) PSCRN
+                       &ht LC(Y) LC(W)    &lt_tog NUM LIVE   &kp LSHFT  &kp LCTRL  &bksp     &kp SPACE  &kp RALT   &kp RSHFT  &lt_tog NAV BT   &ht PSCRN LA(PSCRN)
             >;
             // Left knob: volume. Right knob: word by word (Ctrl+Left/Right).
             // On these Sofles the first binding is a counter-clockwise turn.
