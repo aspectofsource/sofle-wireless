@@ -1,0 +1,342 @@
+// Mark's Sofle: custom layout on Windows "French (Standard, AZERTY)" = AFNOR.
+//
+// How to read this file
+// - The keyboard sends US key codes; Windows turns them into AFNOR characters.
+//   So "&kp N1" types à, "&kp M" types "." and so on. The comment above each row
+//   shows what you see on screen.
+// - The A <-> Q swap is still done by PowerToys on the ThinkPad, NOT here.
+//   If you move it into this file later, switch it off in PowerToys.
+// - Key positions (for combos): left half 0-5, 12-17, 24-29, 36-41;
+//   right half 6-11, 18-23, 30-35, 44-49; encoder presses 42 (left) and 43 (right);
+//   left thumbs 50-54 (outer -> inner), right thumbs 55-59 (inner -> outer).
+//
+// Layers: 0 AZERTY, 1 LIVE, 2 123, 3 NAV, 4 BT.
+// LIVE is a placeholder, NAV and BT are first drafts: still to design together.
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/outputs.h>
+
+// Wake-up key: top outer corner (@ / '), row pin 5, column pin 19 on both halves.
+#define TKL_WAKE_ROW 5
+#define TKL_WAKE_COL 19
+// Switch-off: hold @ and < together for 2 seconds (base layer).
+#define TKL_OFF_KEYS 0 36
+#include "tkl_power.dtsi"
+#include "tkl_brightness.dtsi"
+
+#define AZERTY 0
+#define LIVE 1
+#define NUM 2
+#define NAV 3
+#define BT 4
+
+/ {
+    behaviors {
+        // ---- From TheKeebLab: right knob = one mouse-wheel step per notch ----
+        wheel_step: wheel_step {
+            compatible = "zmk,behavior-wheel-step";
+            #binding-cells = <1>;
+        };
+
+        // ---- Tap / hold keys ----
+        // Generic: hold = first key, tap = second key.
+        ht: ht {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <250>;
+            quick-tap-ms = <150>;
+            bindings = <&kp>, <&kp>;
+        };
+
+        // Layer key: hold = layer while held, tap = switch a layer on/off.
+        // 123/LIVE: hold 123, tap LIVE.   NAV/BT: hold NAV, tap BT.
+        lt_tog: lt_tog {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <200>;
+            bindings = <&mo>, <&tog>;
+        };
+
+        // Bluetooth "forget" keys only work after a 1 second hold.
+        bt_safe: bt_safe {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "hold-preferred";
+            tapping-term-ms = <1000>;
+            bindings = <&bt>, <&none>;
+        };
+
+        // ---- Shift + number row ----
+        // Shift + à é è ê = À É È Ê (AFNOR: Shift+AltGr on the same key).
+        sh_a: sh_a {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N1>, <&kp LS(RA(N1))>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        sh_e1: sh_e1 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N2>, <&kp LS(RA(N2))>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        sh_e2: sh_e2 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N3>, <&kp LS(RA(N3))>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        sh_e3: sh_e3 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N4>, <&kp LS(RA(N4))>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        // Shift + ( = emoji panel (Win + .). TO TEST on the ThinkPad.
+        sh_emo: sh_emo {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N5>, <&kp LG(M)>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        // Shift + ) = F2 (rename)
+        sh_f2: sh_f2 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N6>, <&kp F2>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        // Shift + ‘ = F5 (refresh)
+        sh_f5: sh_f5 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N7>, <&kp F5>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        // Shift + ’ = F11 (full screen)
+        sh_f11: sh_f11 {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N8>, <&kp F11>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        // Shift + « = Alt+F4 (close window)
+        sh_close: sh_close {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N9>, <&kp LA(F4)>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+        // Shift + » = Task Manager (Ctrl+Shift+Esc)
+        sh_task: sh_task {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp N0>, <&kp LC(LS(ESC))>;
+            mods = <(MOD_LSFT|MOD_RSFT)>;
+        };
+
+        // ---- Backspace family ----
+        //   Bksp                    = Backspace
+        //   Left Shift + Bksp       = delete word to the left  (Ctrl+Bksp)
+        //   Right Shift + Bksp      = delete word to the right (Ctrl+Del)
+        //   Ctrl + Bksp             = Delete
+        //   Left Shift + Ctrl + Bksp  = delete to line start
+        //   Right Shift + Ctrl + Bksp = Insert
+        bs_rs: bs_rs {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp BSPC>, <&kp LC(DEL)>;
+            mods = <(MOD_RSFT)>;
+        };
+        bs_sh: bs_sh {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&bs_rs>, <&kp LC(BSPC)>;
+            mods = <(MOD_LSFT)>;
+        };
+        bs_crs: bs_crs {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&kp DEL>, <&kp INS>;
+            mods = <(MOD_RSFT)>;
+        };
+        bs_ctl: bs_ctl {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&bs_crs>, <&del_home>;
+            mods = <(MOD_LSFT)>;
+        };
+        bksp: bksp {
+            compatible = "zmk,behavior-mod-morph";
+            #binding-cells = <0>;
+            bindings = <&bs_sh>, <&bs_ctl>;
+            mods = <(MOD_LCTL|MOD_RCTL)>;
+        };
+    };
+
+    macros {
+        // Delete to line start: Shift+Home, then Backspace.
+        del_home: del_home {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp LS(HOME) &kp BSPC>;
+        };
+        // ^ as a character (dead key ^ followed by Space).
+        caret: caret {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp EQUAL &kp SPACE>;
+        };
+        // π: AFNOR Greek dead key (AltGr+G), then p.
+        pi: pi {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &kp RA(G) &kp P>;
+        };
+    };
+
+    wheel_step_input_listener {
+        compatible = "zmk,input-listener";
+        device = <&wheel_step>;
+    };
+
+    combos {
+        compatible = "zmk,combos";
+
+        // Enter = Backspace + Space (both thumbs). Shift+Enter: hold Shift, then the combo.
+        combo_enter {
+            timeout-ms = <40>;
+            key-positions = <54 55>;
+            bindings = <&kp RET>;
+        };
+        // Caps Lock = both Shifts.
+        combo_caps {
+            timeout-ms = <50>;
+            key-positions = <52 57>;
+            bindings = <&kp CAPS>;
+        };
+        // Esc = @ + à
+        combo_esc {
+            timeout-ms = <40>;
+            key-positions = <0 1>;
+            bindings = <&kp ESC>;
+        };
+        // Tab = + + Q
+        combo_tab {
+            timeout-ms = <40>;
+            key-positions = <12 13>;
+            bindings = <&kp TAB>;
+        };
+        // Alt = < + W (stays held while you hold both)
+        combo_alt {
+            timeout-ms = <40>;
+            key-positions = <36 37>;
+            bindings = <&kp LALT>;
+        };
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        azerty_layer {
+            display-name = "AZERTY";
+            bindings = <
+//  @            à         é         è         ê         (                                     )          ‘          ’          «           »          '
+&kp GRAVE        &sh_a     &sh_e1    &sh_e2    &sh_e3    &sh_emo                               &sh_f2     &sh_f5     &sh_f11    &sh_close   &sh_task   &kp MINUS
+//  +            Q (A↔Q by PowerToys)  Z  E    R         T                                     Y          U          I          O           P          -
+&kp RBKT         &kp Q     &kp W     &kp E     &kp R     &kp T                                 &kp Y      &kp U      &kp I      &kp O       &kp P      &kp LBKT
+//  *            A         S         D         F         G                                     H          J          K          L           M          /
+&kp NON_US_HASH  &kp A     &kp S     &kp D     &kp F     &kp G                                 &kp H      &kp J      &kp K      &kp L       &kp SEMI   &kp SQT
+//  <            W         X         C         V         B     [left knob]    [right knob]     N          .          ,          :           ;          ^
+&kp NON_US_BSLH  &kp Z     &kp X     &kp C     &kp V     &kp B &ht C_MUTE C_PP &ht HOME END    &kp N      &kp M      &kp COMMA  &kp DOT     &kp FSLH   &kp EQUAL
+//                     Undo/Redo          123/LIVE           Shift      Ctrl       Bksp      Space      AltGr      Shift      NAV/BT           PrtSc
+                       &ht LC(Y) LC(W)    &lt_tog NUM LIVE   &kp LSHFT  &kp LCTRL  &bksp     &kp SPACE  &kp RALT   &kp RSHFT  &lt_tog NAV BT   &ht LA(PSCRN) PSCRN
+            >;
+            // Left knob: volume. Right knob: word by word (Ctrl+Left/Right).
+            // On these Sofles the first binding is a counter-clockwise turn.
+            sensor-bindings =
+                <&inc_dec_kp C_VOL_DN C_VOL_UP>,
+                <&inc_dec_kp LC(LEFT) LC(RIGHT)>;
+        };
+
+        live_layer {
+            display-name = "LIVE";
+            // Placeholder: Ableton controls still to design. Tap the 123/LIVE key again to leave.
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans                    &trans  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
+                &trans  &trans  &trans  &trans  &trans    &trans  &trans  &trans  &trans  &trans
+            >;
+            // Right knob = Ableton zoom (- / +). TO TEST in Ableton.
+            sensor-bindings =
+                <&inc_dec_kp C_VOL_DN C_VOL_UP>,
+                <&inc_dec_kp LBKT RBKT>;
+        };
+
+        num_layer {
+            display-name = "123";
+            // Right half like the TI-36X Pro. Operators send / * - + so they work in
+            // every program (calculator, Excel).
+            bindings = <
+//                                                                    ,          (          )          ÷ (/)      %
+&trans  &trans  &trans  &trans  &trans  &trans                 &none  &kp COMMA  &kp N5     &kp N6     &kp SQT    &kp RA(P)
+//                                                                    7          8          9          × (*)      ^
+&trans  &trans  &trans  &trans  &trans  &trans                 &none  &kp LS(N7) &kp LS(N8) &kp LS(N9) &kp NON_US_HASH &caret
+//                                                                    4          5          6          − (-)      √
+&trans  &trans  &trans  &trans  &trans  &trans                 &none  &kp LS(N4) &kp LS(N5) &kp LS(N6) &kp LBKT   &kp LS(RA(SQT))
+//                                                                    1          2          3          +          π
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans &none  &kp LS(N1) &kp LS(N2) &kp LS(N3) &kp RBKT   &pi
+//                                                    (angled)  Space      0           .       Enter
+                &trans  &trans  &trans  &trans  &trans  &none   &kp SPACE  &kp LS(N0)  &kp M   &kp RET
+            >;
+        };
+
+        nav_layer {
+            display-name = "NAV";
+            // First draft. Arrows on E S D F, Windows-key shortcuts as single keys,
+            // F1-F12 on the number row.
+            bindings = <
+//  F1        F2        F3        F4        F5        F6                                    F7        F8        F9        F10       F11       F12
+&kp F1        &kp F2    &kp F3    &kp F4    &kp F5    &kp F6                                &kp F7    &kp F8    &kp F9    &kp F10   &kp F11   &kp F12
+//  (+)       Q: window to left screen     E: ↑       R: Run                                (Y)       (U)       I: Settings (O)     P: Project
+&trans        &kp LG(LS(LEFT)) &trans &kp UP &kp LG(R) &trans                              &trans    &trans    &kp LG(I) &trans    &kp LG(P) &trans
+//  (*)       (A)       S: ←      D: ↓      F: →      G: window to right screen             (H)       (J)       (K)       L: lock   (M)       (/)
+&trans        &trans    &kp LEFT  &kp DOWN  &kp RIGHT &kp LG(LS(RIGHT))                     &trans    &trans    &trans    &kp LG(L) &trans    &trans
+//  (<)       W: Start  X: Win+X  (C)       V: clipboard
+&trans        &kp LGUI  &kp LG(X) &trans    &kp LG(V) &trans    &trans          &trans      &trans    &trans    &trans    &trans    &trans    &trans
+                        &trans    &trans    &trans    &trans    &trans          &trans      &trans    &trans    &trans    &trans
+            >;
+        };
+
+        bt_layer {
+            display-name = "BT";
+            // From TheKeebLab's layer 3. Tap the NAV/BT key again to leave.
+            // "Forget" keys (top-left, and under it) need a 1 second hold.
+            bindings = <
+&bt_safe BT_CLR_CMD 0  &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4             &none  &none  &none  &none  &none  &none
+&bt_safe BT_CLR_ALL_CMD 0 &bt BT_DISC 0  &bt BT_DISC 1  &bt BT_DISC 2  &bt BT_DISC 3  &bt BT_DISC 4            &none  &none  &none  &none  &none  &none
+&none                  &out OUT_USB   &out OUT_BLE   &scr_bri       &kp K_SLEEP    &none                    &none  &none  &none  &none  &none  &none
+&none                  &none          &none          &none          &none          &none  &trans  &trans    &none  &none  &none  &none  &none  &none
+                                      &none          &none          &none          &none  &none   &none     &none  &none  &trans &none
+            >;
+        };
+
+        extra1 {
+            status = "reserved";
+        };
+
+        extra2 {
+            status = "reserved";
+        };
+
+        extra3 {
+            status = "reserved";
+        };
+    };
+};
