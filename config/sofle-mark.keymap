@@ -308,8 +308,8 @@
 &trans        &kp LG(LS(LEFT)) &trans &kp UP &kp LG(R) &trans                              &trans    &trans    &kp LG(I) &trans    &kp LG(P) &trans
 //  (*)       (A)       S: ←      D: ↓      F: →      G: window to right screen             (H)       (J)       (K)       L: lock   (M)       (/)
 &trans        &trans    &kp LEFT  &kp DOWN  &kp RIGHT &kp LG(LS(RIGHT))                     &trans    &trans    &trans    &kp LG(L) &trans    &trans
-//  (<)       W: Start  X: Win+X  (C)       V: clipboard
-&trans        &kp LGUI  &kp LG(X) &trans    &kp LG(V) &trans    &trans          &trans      &trans    &trans    &trans    &trans    &trans    &trans
+//  (<)       W: Start  X: Win+X  (C)       V: clipboard  B: show desktop (Bureau)
+&trans        &kp LGUI  &kp LG(X) &trans    &kp LG(V) &kp LG(D) &trans          &trans      &trans    &trans    &trans    &trans    &trans    &trans
                         &trans    &trans    &trans    &trans    &trans          &trans      &trans    &trans    &trans    &trans
             >;
         };
