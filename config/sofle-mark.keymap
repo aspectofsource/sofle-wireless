@@ -318,10 +318,10 @@
             bindings = <
 //  F1        F2        F3        F4        F5        F6                                    F7        F8        F9        F10       F11       F12
 &kp F1        &kp F2    &kp F3    &kp F4    &kp F5    &kp F6                                &kp F7    &kp F8    &kp F9    &kp F10   &kp F11   &kp F12
-//  (+)       Q: window to left screen  Z: Tab  E: ↑  R: Run  T: Alt+Tab                  (Y)       (U)       I: Settings (O)     P: Project
-&trans        &kp LG(LS(LEFT)) &kp TAB &kp UP &kp LG(R) &alt_tab                              &trans    &trans    &kp LG(I) &trans    &kp LG(P) &trans
-//  (*)       (A)       S: ←      D: ↓      F: →      G: window to right screen             (H)       (J)       (K)       L: lock   (M)       (/)
-&trans        &trans    &kp LEFT  &kp DOWN  &kp RIGHT &kp LG(LS(RIGHT))                     &trans    &trans    &trans    &kp LG(L) &trans    &trans
+//  (+)       (Q)       Z: Tab    E: ↑      R: Run    T: Alt+Tab                            (Y)       (U)       I: Settings (O)     P: Project
+&trans        &trans    &kp TAB   &kp UP    &kp LG(R) &alt_tab                               &trans    &trans    &kp LG(I) &trans    &kp LG(P) &trans
+//  (*)       A: window to left screen  S: ←  D: ↓  F: →  G: window to right screen         (H)       (J)       (K)       L: lock   (M)       (/)
+&trans        &kp LG(LS(LEFT)) &kp LEFT  &kp DOWN  &kp RIGHT &kp LG(LS(RIGHT))                     &trans    &trans    &trans    &kp LG(L) &trans    &trans
 //  (<)       W: Start  X: Win+X  (C)       V: clipboard  B: show desktop (Bureau)
 &trans        &kp LGUI  &kp LG(X) &trans    &kp LG(V) &kp LG(D) &trans          &trans      &trans    &trans    &trans    &trans    &trans    &trans
                         &trans    &trans    &trans    &trans    &trans          &trans      &trans    &trans    &trans    &trans
