@@ -191,6 +191,20 @@
             #binding-cells = <0>;
             bindings = <&macro_tap &kp EQUAL &kp SPACE>;
         };
+        // Alt+Tab: Alt stays held while you hold the key (NAV + T).
+        // While holding T, tap Z (NAV + Z = Tab) to go further in the list.
+        alt_tab: alt_tab {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            wait-ms = <10>;
+            tap-ms = <10>;
+            bindings
+                = <&macro_press &kp LALT>
+                , <&macro_tap &kp TAB>
+                , <&macro_pause_for_release>
+                , <&macro_release &kp LALT>
+                ;
+        };
         // π: AFNOR Greek dead key (AltGr+G), then p.
         pi: pi {
             compatible = "zmk,behavior-macro";
@@ -304,8 +318,8 @@
             bindings = <
 //  F1        F2        F3        F4        F5        F6                                    F7        F8        F9        F10       F11       F12
 &kp F1        &kp F2    &kp F3    &kp F4    &kp F5    &kp F6                                &kp F7    &kp F8    &kp F9    &kp F10   &kp F11   &kp F12
-//  (+)       Q: window to left screen     E: ↑       R: Run                                (Y)       (U)       I: Settings (O)     P: Project
-&trans        &kp LG(LS(LEFT)) &trans &kp UP &kp LG(R) &trans                              &trans    &trans    &kp LG(I) &trans    &kp LG(P) &trans
+//  (+)       Q: window to left screen  Z: Tab  E: ↑  R: Run  T: Alt+Tab                  (Y)       (U)       I: Settings (O)     P: Project
+&trans        &kp LG(LS(LEFT)) &kp TAB &kp UP &kp LG(R) &alt_tab                              &trans    &trans    &kp LG(I) &trans    &kp LG(P) &trans
 //  (*)       (A)       S: ←      D: ↓      F: →      G: window to right screen             (H)       (J)       (K)       L: lock   (M)       (/)
 &trans        &trans    &kp LEFT  &kp DOWN  &kp RIGHT &kp LG(LS(RIGHT))                     &trans    &trans    &trans    &kp LG(L) &trans    &trans
 //  (<)       W: Start  X: Win+X  (C)       V: clipboard  B: show desktop (Bureau)
