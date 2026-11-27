@@ -330,9 +330,9 @@
             // First draft. Arrows on E S D F, Windows-key shortcuts as single keys,
             // taskbar apps (Win+1..0) on the number row. F1-F12 are in the MOUSE layer.
             bindings = <
-//  @: Start à: Claude é: Obsidian è: Chrome ê: Agenda (: Outlook                         ): Roon    ‘: Live    ’: YouTube «: WhatsApp »: Monkeytype (')
+//  @: Start à: Claude é: Obsidian è: Chrome ê: Agenda (: Outlook                         ): Roon    ‘: Live    ’: YouTube «: WhatsApp »: Monkeytype ': Verkenner
 //  Win + 1-9, 0 = open the app at that place on the taskbar (1 = first icon).
-&kp LGUI      &kp LG(N1) &kp LG(N2) &kp LG(N3) &kp LG(N4) &kp LG(N5)                      &kp LG(N6) &kp LG(N7) &kp LG(N8) &kp LG(N9) &kp LG(N0) &none
+&kp LGUI      &kp LG(N1) &kp LG(N2) &kp LG(N3) &kp LG(N4) &kp LG(N5)                      &kp LG(N6) &kp LG(N7) &kp LG(N8) &kp LG(N9) &kp LG(N0) &kp LG(E)
 //  (+)       (Q)       Z: Tab    E: ↑      R: Run    T: Alt+Tab                            (Y)       (U)       I: Settings (O)     P: Project
 &trans        &trans    &kp TAB   &kp UP    &kp LG(R) &alt_tab                               &trans    &trans    &kp LG(I) &trans    &kp LG(P) &trans
 //  (*)       A: window to left screen  S: ←  D: ↓  F: →  G: window to right screen         (H)       (J)       (K)       L: lock   (M)       (/)
