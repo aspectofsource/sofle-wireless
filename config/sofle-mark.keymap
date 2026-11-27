@@ -10,13 +10,14 @@
 //   right half 6-11, 18-23, 30-35, 44-49; encoder presses 42 (left) and 43 (right);
 //   left thumbs 50-54 (outer -> inner), right thumbs 55-59 (inner -> outer).
 //
-// Layers: 0 AZERTY, 1 LIVE, 2 123, 3 NAV, 4 BT.
+// Layers: 0 AZERTY, 1 LIVE, 2 123, 3 NAV, 4 BT, 5 MUIS (mouse).
 // LIVE is a placeholder, NAV and BT are first drafts: still to design together.
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/pointing.h>
 
 // Wake-up key: top outer corner (@ / '), row pin 5, column pin 19 on both halves.
 #define TKL_WAKE_ROW 5
@@ -31,6 +32,7 @@
 #define NUM 2
 #define NAV 3
 #define BT 4
+#define MOUSE 5
 
 / {
     behaviors {
@@ -38,6 +40,12 @@
         wheel_step: wheel_step {
             compatible = "zmk,behavior-wheel-step";
             #binding-cells = <1>;
+        };
+        // Right knob in the MUIS layer: mouse wheel (counter-clockwise = scroll up).
+        knob_scroll: knob_scroll {
+            compatible = "zmk,behavior-sensor-rotate";
+            #sensor-binding-cells = <0>;
+            bindings = <&wheel_step 1>, <&wheel_step (-1)>;
         };
 
         // ---- Tap / hold keys ----
@@ -52,7 +60,7 @@
         };
 
         // Layer key: hold = layer while held, tap = switch a layer on/off.
-        // 123/LIVE: hold 123, tap LIVE.   NAV/BT: hold NAV, tap BT.
+        // 123/LIVE: hold 123, tap LIVE.   NAV/MUIS: hold NAV, tap MUIS (mouse).
         lt_tog: lt_tog {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -245,6 +253,12 @@
             key-positions = <12 13>;
             bindings = <&kp TAB>;
         };
+        // BT layer = 123 key + NAV key together (hold both, then use the left hand).
+        combo_bt {
+            timeout-ms = <50>;
+            key-positions = <51 58>;
+            bindings = <&mo BT>;
+        };
         // Alt = < + W (stays held while you hold both)
         combo_alt {
             timeout-ms = <40>;
@@ -267,8 +281,8 @@
 &kp NON_US_HASH  &kp A     &kp S     &kp D     &kp F     &kp G                                 &kp H      &kp J      &kp K      &kp L       &kp SEMI   &kp SQT
 //  <            W         X         C         V         B     [left knob]    [right knob]     N          .          ,          :           ;          ^
 &kp NON_US_BSLH  &kp Z     &kp X     &kp C     &kp V     &kp B &ht C_MUTE C_PP &ht HOME END    &kp N      &kp M      &kp COMMA  &kp DOT     &kp FSLH   &kp EQUAL
-//                     Undo/Redo          123/LIVE           Shift      Ctrl       Bksp      Space      AltGr      Shift      NAV/BT           PrtSc
-                       &ht LC(Y) LC(W)    &lt_tog NUM LIVE   &kp LSHFT  &kp LCTRL  &bksp     &kp SPACE  &kp RALT   &kp RSHFT  &lt_tog NAV BT   &ht PSCRN LA(PSCRN)
+//                     Undo/Redo          123/LIVE           Shift      Ctrl       Bksp      Space      AltGr      Shift      NAV/MUIS            PrtSc
+                       &ht LC(Y) LC(W)    &lt_tog NUM LIVE   &kp LSHFT  &kp LCTRL  &bksp     &kp SPACE  &kp RALT   &kp RSHFT  &lt_tog NAV MOUSE   &ht PSCRN LA(PSCRN)
             >;
             // Left knob: volume. Right knob: word by word (Ctrl+Left/Right).
             // On these Sofles the first binding is a counter-clockwise turn.
@@ -330,7 +344,7 @@
 
         bt_layer {
             display-name = "BT";
-            // From TheKeebLab's layer 3. Tap the NAV/BT key again to leave.
+            // From TheKeebLab's layer 3. Hold the 123 key + NAV key together, release to leave.
             // "Forget" keys (top-left, and under it) need a 1 second hold.
             bindings = <
 &bt_safe BT_CLR_CMD 0  &bt BT_SEL 0   &bt BT_SEL 1   &bt BT_SEL 2   &bt BT_SEL 3   &bt BT_SEL 4             &none  &none  &none  &none  &none  &none
@@ -341,8 +355,27 @@
             >;
         };
 
-        extra1 {
-            status = "reserved";
+        mouse_layer {
+            display-name = "MUIS";
+            // Tap the NAV key to switch on, tap it again to switch off.
+            // Left hand moves (like the arrows in NAV), right hand clicks and scrolls.
+            // Left thumbs, X C V and the bottom row stay normal: Ctrl+click, Shift+click,
+            // Ctrl+C / Ctrl+V still work. Right Space = left click (hold it to drag).
+            bindings = <
+&trans  &trans  &trans  &trans  &trans  &trans                         &none  &none  &none  &none  &none  &none
+//              (Z)     E: ↑               R: scroll up                         U: back I: scroll ↑  O: forward
+&trans  &none   &none   &mmv MOVE_UP   &msc SCRL_UP  &none                &none  &mkp MB4  &msc SCRL_UP  &mkp MB5  &none  &none
+//              (A)     S: ←    D: ↓    F: →    G: scroll down            H     J: left click  K: middle  L: right click
+&trans  &none   &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &msc SCRL_DOWN    &none  &mkp LCLK  &mkp MCLK  &mkp RCLK  &none  &none
+//              W X C V B normal                                          ,: scroll ↓
+&trans  &trans  &trans  &trans  &trans  &trans  &trans  &trans            &none  &none  &msc SCRL_DOWN  &none  &none  &none
+//                                                        Space: left click
+                &trans  &trans  &trans  &trans  &trans    &mkp LCLK  &none  &trans  &trans  &trans
+            >;
+            // Right knob = mouse wheel.
+            sensor-bindings =
+                <&inc_dec_kp C_VOL_DN C_VOL_UP>,
+                <&knob_scroll>;
         };
 
         extra2 {
