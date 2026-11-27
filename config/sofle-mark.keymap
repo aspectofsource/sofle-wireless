@@ -328,10 +328,11 @@
         nav_layer {
             display-name = "NAV";
             // First draft. Arrows on E S D F, Windows-key shortcuts as single keys,
-            // F1-F12 on the number row.
+            // taskbar apps (Win+1..0) on the number row. F1-F12 are in the MOUSE layer.
             bindings = <
-//  F1        F2        F3        F4        F5        F6                                    F7        F8        F9        F10       F11       F12
-&kp F1        &kp F2    &kp F3    &kp F4    &kp F5    &kp F6                                &kp F7    &kp F8    &kp F9    &kp F10   &kp F11   &kp F12
+//  (@)       à: Claude é: Obsidian è: Chrome ê: Agenda (: Outlook                         ): Roon    ‘: Live    ’: YouTube «: WhatsApp »: Monkeytype (')
+//  Win + 1-9, 0 = open the app at that place on the taskbar (1 = first icon).
+&none         &kp LG(N1) &kp LG(N2) &kp LG(N3) &kp LG(N4) &kp LG(N5)                      &kp LG(N6) &kp LG(N7) &kp LG(N8) &kp LG(N9) &kp LG(N0) &none
 //  (+)       (Q)       Z: Tab    E: ↑      R: Run    T: Alt+Tab                            (Y)       (U)       I: Settings (O)     P: Project
 &trans        &trans    &kp TAB   &kp UP    &kp LG(R) &alt_tab                               &trans    &trans    &kp LG(I) &trans    &kp LG(P) &trans
 //  (*)       A: window to left screen  S: ←  D: ↓  F: →  G: window to right screen         (H)       (J)       (K)       L: lock   (M)       (/)
@@ -362,7 +363,8 @@
             // Left thumbs, X C V and the bottom row stay normal: Ctrl+click, Shift+click,
             // Ctrl+C / Ctrl+V still work. Right Space = left click (hold it to drag).
             bindings = <
-&trans  &trans  &trans  &trans  &trans  &trans                         &none  &none  &none  &none  &none  &none
+//  F1-F12 on the number row (moved here from NAV).
+&kp F1  &kp F2  &kp F3  &kp F4  &kp F5  &kp F6                         &kp F7  &kp F8  &kp F9  &kp F10  &kp F11  &kp F12
 //              (Z)     E: ↑           (R)    T: scroll up                      U: back I: scroll ↑  O: forward
 &trans  &none   &none   &mmv MOVE_UP   &none  &msc SCRL_UP                &none  &mkp MB4  &msc SCRL_UP  &mkp MB5  &none  &none
 //              (A)     S: ←    D: ↓    F: →    G: scroll down            H     J: left click  K: middle  L: right click
