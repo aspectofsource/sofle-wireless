@@ -10,7 +10,7 @@
 //   right half 6-11, 18-23, 30-35, 44-49; encoder presses 42 (left) and 43 (right);
 //   left thumbs 50-54 (outer -> inner), right thumbs 55-59 (inner -> outer).
 //
-// Layers: 0 AZERTY, 1 LIVE, 2 123, 3 NAV, 4 BT, 5 MUIS (mouse).
+// Layers: 0 AZERTY, 1 LIVE, 2 123, 3 NAV, 4 BT, 5 MOUSE.
 // LIVE is a placeholder, NAV and BT are first drafts: still to design together.
 
 #include <behaviors.dtsi>
@@ -41,7 +41,7 @@
             compatible = "zmk,behavior-wheel-step";
             #binding-cells = <1>;
         };
-        // Right knob in the MUIS layer: mouse wheel (counter-clockwise = scroll up).
+        // Right knob in the MOUSE layer: mouse wheel (counter-clockwise = scroll up).
         knob_scroll: knob_scroll {
             compatible = "zmk,behavior-sensor-rotate";
             #sensor-binding-cells = <0>;
@@ -60,7 +60,7 @@
         };
 
         // Layer key: hold = layer while held, tap = switch a layer on/off.
-        // 123/LIVE: hold 123, tap LIVE.   NAV/MUIS: hold NAV, tap MUIS (mouse).
+        // 123/LIVE: hold 123, tap LIVE.   NAV/MOUSE: hold NAV, tap MOUSE.
         lt_tog: lt_tog {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -281,7 +281,7 @@
 &kp NON_US_HASH  &kp A     &kp S     &kp D     &kp F     &kp G                                 &kp H      &kp J      &kp K      &kp L       &kp SEMI   &kp SQT
 //  <            W         X         C         V         B     [left knob]    [right knob]     N          .          ,          :           ;          ^
 &kp NON_US_BSLH  &kp Z     &kp X     &kp C     &kp V     &kp B &ht C_MUTE C_PP &ht HOME END    &kp N      &kp M      &kp COMMA  &kp DOT     &kp FSLH   &kp EQUAL
-//                     Undo/Redo          123/LIVE           Shift      Ctrl       Bksp      Space      AltGr      Shift      NAV/MUIS            PrtSc
+//                     Undo/Redo          123/LIVE           Shift      Ctrl       Bksp      Space      AltGr      Shift      NAV/MOUSE           PrtSc
                        &ht LC(Y) LC(W)    &lt_tog NUM LIVE   &kp LSHFT  &kp LCTRL  &bksp     &kp SPACE  &kp RALT   &kp RSHFT  &lt_tog NAV MOUSE   &ht PSCRN LA(PSCRN)
             >;
             // Left knob: volume. Right knob: word by word (Ctrl+Left/Right).
@@ -356,15 +356,15 @@
         };
 
         mouse_layer {
-            display-name = "MUIS";
+            display-name = "MOUSE";
             // Tap the NAV key to switch on, tap it again to switch off.
-            // Left hand moves (like the arrows in NAV), right hand clicks and scrolls.
+            // Left hand moves (like the arrows in NAV), T / G scroll (same column), right hand clicks.
             // Left thumbs, X C V and the bottom row stay normal: Ctrl+click, Shift+click,
             // Ctrl+C / Ctrl+V still work. Right Space = left click (hold it to drag).
             bindings = <
 &trans  &trans  &trans  &trans  &trans  &trans                         &none  &none  &none  &none  &none  &none
-//              (Z)     E: ↑               R: scroll up                         U: back I: scroll ↑  O: forward
-&trans  &none   &none   &mmv MOVE_UP   &msc SCRL_UP  &none                &none  &mkp MB4  &msc SCRL_UP  &mkp MB5  &none  &none
+//              (Z)     E: ↑           (R)    T: scroll up                      U: back I: scroll ↑  O: forward
+&trans  &none   &none   &mmv MOVE_UP   &none  &msc SCRL_UP                &none  &mkp MB4  &msc SCRL_UP  &mkp MB5  &none  &none
 //              (A)     S: ←    D: ↓    F: →    G: scroll down            H     J: left click  K: middle  L: right click
 &trans  &none   &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &msc SCRL_DOWN    &none  &mkp LCLK  &mkp MCLK  &mkp RCLK  &none  &none
 //              W X C V B normal                                          ,: scroll ↓
